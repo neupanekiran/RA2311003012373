@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Stage 1: Priority Inbox Notification System Design
 
-## Getting Started
+## Overview
+As the campus notifications application grows in usage, users face a high volume of notifications, making it difficult to keep track of important updates. To solve this, we are introducing a **Priority Inbox** feature that efficiently displays the top `n` most important unread notifications based on a predefined weighting strategy and recency.
 
-First, run the development server:
+## Priority Logic
+The priority of a notification is determined by two main factors, evaluated in the following order:
+1. **Weight (Type):** Notifications are categorized and weighted as follows:
+   - `Placement` (Highest Priority)
+   - `Result` (Medium Priority)
+   - `Event` (Lowest Priority)
+2. **Recency (Timestamp):** If two notifications share the same weight, the more recent notification (latest timestamp) takes precedence.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Efficiently Maintaining the Top 10
+Since new notifications will continually stream into the system, sorting the entire dataset of notifications every time a new one arrives would be inefficient (`O(N log N)` time complexity). 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To efficiently maintain the top 10 (or top `n`) priority notifications, the most optimal data structure is a **Min-Heap (Priority Queue)** of size `n`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Approach:
+1. Initialize an empty Min-Heap.
+2. Iterate through the incoming stream of unread notifications.
+3. For each notification, calculate its priority score based on its Type weight and Timestamp.
+4. If the heap has fewer than `n` elements, insert the notification.
+5. If the heap already has `n` elements, compare the current notification with the root of the Min-Heap (which represents the *lowest* priority notification currently in the top `n`):
+   - If the new notification has a **higher** priority than the root, remove the root and insert the new notification.
+   - If the new notification has a **lower** priority, discard it.
+6. Once all notifications are processed (or continuously as they stream in), the heap will contain exactly the top `n` most important notifications.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Complexity:
+- **Time Complexity:** Inserting or replacing an element in a Min-Heap of size `n` takes `O(log n)`. For `N` total notifications, the overall time complexity is `O(N log n)`. For `n = 10`, `log 10` is a small constant, effectively making the time complexity **`O(N)`**. This is highly scalable for large volumes of incoming notifications.
+- **Space Complexity:** The heap only ever stores exactly `n` elements, resulting in a space complexity of **`O(n)`**, ensuring minimal memory overhead.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Frontend Implementation Details
+For the frontend logic (TypeScript/JavaScript), since standard JS lacks a built-in Heap data structure, maintaining a constantly sorted array of size `n` (`O(n)` per insertion) is often acceptable given that `n` is small (e.g., 10). However, the conceptual design outlined above models the optimal theoretical approach for a backend streaming service or heavy data load.
