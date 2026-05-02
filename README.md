@@ -32,3 +32,15 @@ To efficiently maintain the top 10 (or top `n`) priority notifications, the most
 
 ## Frontend Implementation Details
 For the frontend logic (TypeScript/JavaScript), since standard JS lacks a built-in Heap data structure, maintaining a constantly sorted array of size `n` (`O(n)` per insertion) is often acceptable given that `n` is small (e.g., 10). However, the conceptual design outlined above models the optimal theoretical approach for a backend streaming service or heavy data load.
+
+## RESULTS 
+<img width="1440" height="900" alt="Screenshot 2026-05-02 at 12 58 20" src="https://github.com/user-attachments/assets/aebceaa3-c46a-4fc9-a621-2e9a540eca3c" />
+<img width="1440" height="900" alt="Screenshot 2026-05-02 at 12 58 09" src="https://github.com/user-attachments/assets/60285826-893e-4367-8beb-297ef544b47e" />
+<img width="1440" height="900" alt="Screenshot 2026-05-02 at 12 58 06" src="https://github.com/user-attachments/assets/e2bd8d9b-51ba-4b95-8fa0-1fcf2d322a64" />
+<img width="1440" height="900" alt="Screenshot 2026-05-02 at 12 58 03" src="https://github.com/user-attachments/assets/6f37939f-3706-4ebb-906c-5fa4192513ed" />
+<img width="1440" height="900" alt="Screenshot 2026-05-02 at 12 57 59 1" src="https://github.com/user-attachments/assets/746e2e62-5ee1-4f17-b5f4-0c32126a0181" />
+<img width="1440" height="900" alt="Screenshot 2026-05-02 at 12 57 59" src="https://github.com/user-attachments/assets/5729407f-1dd4-4047-8815-57a50894f328" />
+<img width="1440" height="900" alt="Screenshot 2026-05-02 at 12 56 40" src="https://github.com/user-attachments/assets/2f8d9e2e-debf-458a-8859-c5e4300f6bba" />
+<img width="1440" height="900" alt="Screenshot 2026-05-02 at 12 56 36" src="https://github.com/user-attachments/assets/ed2c678f-afb9-4849-8264-c5cf84203b26" />
+<img width="1440" height="900" alt="Screenshot 2026-05-02 at 12 54 39" src="https://github.com/user-attachments/assets/5e72b657-834c-4e7d-9660-9faed7cdb06d" />
+
